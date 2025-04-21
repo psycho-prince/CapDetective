@@ -1,5 +1,6 @@
+
 import {NextResponse} from 'next/server';
-import {GoogleGenerativeAI} from '@google-generative-ai';
+import {GoogleGenerativeAI} from '@google/generative-ai';
 
 const geminiApiKey = process.env.GEMINI_API_KEY;
 
@@ -10,7 +11,7 @@ if (!geminiApiKey) {
 const genAI = new GoogleGenerativeAI(geminiApiKey);
 
 const promptTemplate = (userText: string) => `
-You're a deception analysis AI.
+You're a deception analysis AI, helping couples and lovers settle arguments by identifying potential red flags in messages.
 
 A user will paste a personal message, email, or chat log. Your task is to:
 
@@ -62,4 +63,3 @@ export async function POST(req: Request) {
     );
   }
 }
-

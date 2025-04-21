@@ -1,3 +1,4 @@
+
 'use client';
 
 import {useState} from 'react';
@@ -38,7 +39,7 @@ export default function Home() {
   const [isImprovingPrompt, setIsImprovingPrompt] = useState(false);
 
   useEffect(() => {
-    document.body.style.backgroundImage = `url('https://picsum.photos/1920/1080')`;
+    document.body.style.backgroundImage = `url('https://images.unsplash.com/photo-1505843519540-bca96959386e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')`;
     document.body.style.backgroundSize = 'cover';
     document.body.style.backgroundRepeat = 'no-repeat';
 
@@ -62,9 +63,15 @@ export default function Home() {
       });
 
       if (!response.ok) {
-        const errorData = await response.text(); // Get the error as text
-        const errorMessage = errorData || `HTTP error! status: ${response.status}`;
-        throw new Error(errorMessage);
+        try {
+          const errorData = await response.json(); // Try to parse JSON error
+          const errorMessage = errorData.error || `HTTP error! status: ${response.status}`;
+          throw new Error(errorMessage);
+        } catch (jsonError) {
+          // If JSON parsing fails, just use the raw response text
+          const errorText = await response.text();
+          throw new Error(`HTTP error! status: ${response.status}, body: ${errorText}`);
+        }
       }
 
       try {
@@ -155,11 +162,11 @@ export default function Home() {
       <div className="flex h-screen">
         <Sidebar>
           <SidebarHeader>
-            <h4 className="font-semibold">LieCatcher Settings</h4>
+            <h4 className="font-semibold">Settings</h4>
           </SidebarHeader>
           <SidebarContent>
             <SidebarGroup>
-              <SidebarGroupLabel>Feedback</SidebarGroupLabel>
+              <SidebarGroupLabel>AI Feedback</SidebarGroupLabel>
               <SidebarSeparator />
               <Textarea
                 placeholder="Give feedback to improve the AI"
@@ -193,7 +200,7 @@ export default function Home() {
           <Card className="w-full max-w-2xl rounded-lg shadow-md bg-card">
             <CardHeader>
               <CardTitle className="text-2xl font-semibold tracking-tight">
-                LieCatcher 🕵️
+                Love Detective 🕵️
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
