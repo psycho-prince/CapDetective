@@ -1,0 +1,27 @@
+{
+  "node": {
+    "40dcf2ede226d12c111f8295c156868ddbd0446af2": {
+      "workers": {
+        "app/page": {
+          "moduleId": "[project]/.next-internal/server/app/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/ai/flows/improve-prompt-template.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/src/ai/flows/analyze-text-flow.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/page": "action-browser"
+      }
+    },
+    "407c1901046f1186f6c2993505c47fa3d82f079c33": {
+      "workers": {
+        "app/page": {
+          "moduleId": "[project]/.next-internal/server/app/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/ai/flows/improve-prompt-template.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/src/ai/flows/analyze-text-flow.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/page": "action-browser"
+      }
+    }
+  },
+  "edge": {}
+}
