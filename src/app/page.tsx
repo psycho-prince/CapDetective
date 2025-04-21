@@ -44,7 +44,7 @@ export default function Home() {
 
 
   useEffect(() => {
-    document.body.style.backgroundImage = `url('https://images.unsplash.com/photo-1505843519540-bca96959386e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')`;
+    document.body.style.backgroundImage = `url('https://images.unsplash.com/photo-1541544741793-4e9349224783?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')`;
     document.body.style.backgroundSize = 'cover';
     document.body.style.backgroundRepeat = 'no-repeat';
 
@@ -81,20 +81,32 @@ export default function Home() {
         }
       }
 
-      const data = await response.json();
-      setAnalysisResult(data.analysis);
-      setAnalysisVerdict(data.verdict);
-      setAnalysisQuestion(data.clarifyingQuestion);
+      try {
+        const data = await response.json();
+        setAnalysisResult(data.analysis);
+        setAnalysisVerdict(data.verdict);
+        setAnalysisQuestion(data.clarifyingQuestion);
 
-      // Update conversation history
-      setConversationHistory(prevHistory => [
-        ...prevHistory,
-        { role: 'user', content: inputText },
-        {
-          role: 'assistant',
-          content: `Analysis: ${data.analysis}\nVerdict: ${data.verdict}\nClarifying Question: ${data.clarifyingQuestion || ''}`,
-        },
-      ]);
+        // Update conversation history
+        setConversationHistory(prevHistory => [
+          ...prevHistory,
+          { role: 'user', content: inputText },
+          {
+            role: 'assistant',
+            content: `Analysis: ${data.analysis}\nVerdict: ${data.verdict}\nClarifying Question: ${data.clarifyingQuestion || ''}`,
+          },
+        ]);
+      } catch (jsonError) {
+        // Handle JSON parsing errors
+        console.error('JSON parsing error:', jsonError);
+        setAnalysisResult(`Analysis failed: Could not parse JSON response. ${jsonError.message}`);
+        toast({
+          variant: "destructive",
+          title: "Analysis Failed",
+          description: `Could not parse JSON response. ${jsonError.message}`,
+        });
+        return;
+      }
     } catch (error: any) {
       console.error('Analysis failed:', error);
       setAnalysisResult(`Analysis failed: ${error.message}`);
@@ -207,7 +219,7 @@ export default function Home() {
           <Card className="w-full max-w-2xl rounded-lg shadow-md bg-card">
             <CardHeader>
               <CardTitle className="text-2xl font-semibold tracking-tight">
-                LieCatcher 🕵️
+              Relationship Radar 
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
