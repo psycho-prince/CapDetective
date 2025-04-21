@@ -26,7 +26,8 @@ export default function Home() {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorData = await response.json();
+        throw new Error(`AI analysis failed: ${errorData.error}`);
       }
 
       const data = await response.json();
