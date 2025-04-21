@@ -5,11 +5,10 @@
 ## 📦 Tech Stack
 
 - Node.js
-- Express.js (if applicable)
-- MongoDB / PostgreSQL (or other DB)
+- Express.js
+- MongoDB / PostgreSQL 
 - TypeScript / JavaScript
-- Docker (optional)
-- [Other tools you use]
+- Docker 
 
 ---
 
