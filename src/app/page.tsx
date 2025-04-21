@@ -1,4 +1,3 @@
-
 'use client';
 
 import {useState} from 'react';
@@ -33,6 +32,8 @@ const API_ENDPOINT = '/api/analyze';
 export default function Home() {
   const [inputText, setInputText] = useState('');
   const [analysisResult, setAnalysisResult] = useState<string | null>(null);
+  const [analysisVerdict, setAnalysisVerdict] = useState<string | null>(null);
+  const [analysisQuestion, setAnalysisQuestion] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const {toast} = useToast();
   const [feedback, setFeedback] = useState('');
@@ -53,6 +54,8 @@ export default function Home() {
   const analyzeText = async () => {
     setLoading(true);
     setAnalysisResult(null);
+    setAnalysisVerdict(null);
+    setAnalysisQuestion(null);
     try {
       const response = await fetch(API_ENDPOINT, {
         method: 'POST',
@@ -77,6 +80,8 @@ export default function Home() {
       try {
         const data = await response.json();
         setAnalysisResult(data.analysis);
+        setAnalysisVerdict(data.verdict);
+        setAnalysisQuestion(data.clarifyingQuestion);
       } catch (jsonError) {
         // Handle JSON parsing errors
         console.error('JSON parsing error:', jsonError);
@@ -101,14 +106,14 @@ export default function Home() {
     }
   };
 
-  const getVerdictBadge = (analysis: string | null) => {
-    if (!analysis) return null;
+  const getVerdictBadge = (verdict: string | null) => {
+    if (!verdict) return null;
 
-    if (analysis.includes('🟥 Likely Dishonest')) {
+    if (verdict.includes('🟥 Likely Dishonest')) {
       return <Badge variant="destructive">Likely Dishonest</Badge>;
-    } else if (analysis.includes('🟨 Unclear / Mixed')) {
+    } else if (verdict.includes('🟨 Unclear / Mixed')) {
       return <Badge>Unclear / Mixed</Badge>;
-    } else if (analysis.includes('🟩 Likely Honest')) {
+    } else if (verdict.includes('🟩 Likely Honest')) {
       return <Badge>Likely Honest</Badge>;
     }
     return null;
@@ -200,7 +205,7 @@ export default function Home() {
           <Card className="w-full max-w-2xl rounded-lg shadow-md bg-card">
             <CardHeader>
               <CardTitle className="text-2xl font-semibold tracking-tight">
-                Love Detective 🕵️
+                LieCatcher 🕵️
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -230,7 +235,13 @@ export default function Home() {
                   <pre className="whitespace-pre-wrap font-mono text-sm bg-muted p-4 rounded-md">
                     {analysisResult}
                   </pre>
-                  {getVerdictBadge(analysisResult)}
+                  {getVerdictBadge(analysisVerdict)}
+                  {analysisQuestion && (
+                    <>
+                      <h3 className="text-lg font-semibold">Clarifying Question:</h3>
+                      <p>{analysisQuestion}</p>
+                    </>
+                  )}
                 </div>
               )}
             </CardContent>
