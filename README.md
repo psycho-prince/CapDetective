@@ -1,6 +1,6 @@
 # 🚀 DID-SHE-CHEAT-ON-ME
 
-> One-liner mission statement or tagline for the project.
+> Find out if your partner is cheating
 
 ## 📦 Tech Stack
 
