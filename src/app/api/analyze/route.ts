@@ -1,5 +1,5 @@
 import {NextResponse} from 'next/server';
-import {GoogleGenerativeAI} from '@google/generative-ai';
+import {GoogleGenerativeAI} from '@google-generative-ai';
 
 const geminiApiKey = process.env.GEMINI_API_KEY;
 
@@ -55,10 +55,11 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error('AI analysis error:', error);
     return NextResponse.json(
-      {error: 'AI analysis failed'},
+      {error: 'AI analysis failed: ' + (error as any).message},
       {
         status: 500,
       }
     );
   }
 }
+
