@@ -44,7 +44,7 @@ export default function Home() {
 
 
   useEffect(() => {
-    document.body.style.backgroundImage = `url('https://images.unsplash.com/photo-1541544741793-4e9349224783?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')`;
+    document.body.style.backgroundImage = `url('https://images.unsplash.com/photo-1508768787810-6adc1743c461?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80')`;
     document.body.style.backgroundSize = 'cover';
     document.body.style.backgroundRepeat = 'no-repeat';
 
