@@ -5,7 +5,7 @@ import {analyzeText} from '@/ai/flows/analyze-text-flow';
 
 export async function POST(req: Request) {
   try {
-    const {text} = await req.json();
+    const { text, history } = await req.json();
 
     if (!text) {
       return NextResponse.json(
@@ -16,7 +16,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const result = await analyzeText({userText: text});
+    const result = await analyzeText({ userText: text, history: history });
     return NextResponse.json({analysis: result.analysis, verdict: result.verdict, clarifyingQuestion: result.clarifyingQuestion});
   } catch (error) {
     console.error('AI analysis error:', error);

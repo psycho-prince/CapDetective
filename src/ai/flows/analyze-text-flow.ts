@@ -13,6 +13,10 @@ import {z} from 'genkit';
 
 const AnalyzeTextInputSchema = z.object({
   userText: z.string().describe('The text to analyze for deception.'),
+  history: z.array(z.object({
+    role: z.enum(['user', 'assistant']),
+    content: z.string()
+  })).optional().describe('The history of the conversation.'),
 });
 export type AnalyzeTextInput = z.infer<typeof AnalyzeTextInputSchema>;
 
@@ -46,6 +50,10 @@ const prompt = ai.definePrompt({
   input: {
     schema: z.object({
       userText: z.string().describe('The text to analyze for deception.'),
+      history: z.array(z.object({
+        role: z.enum(['user', 'assistant']),
+        content: z.string()
+      })).optional().describe('The history of the conversation.'),
     }),
   },
   output: {
@@ -76,6 +84,13 @@ Avoid being overly dramatic. Keep it short and Gen Z-friendly. Format your respo
 - "You always overthink" → 🚩 Could be manipulative gaslighting.
 
 📊 Verdict: 🟥 Likely Dishonest
+
+{% if history %}
+Conversation History:
+{% for message in history %}
+{{ message.role }}: {{ message.content }}
+{% endfor %}
+{% endif %}
 
 Now analyze this message:
 {{{userText}}}

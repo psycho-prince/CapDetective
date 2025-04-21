@@ -38,6 +38,10 @@ export default function Home() {
   const {toast} = useToast();
   const [feedback, setFeedback] = useState('');
   const [isImprovingPrompt, setIsImprovingPrompt] = useState(false);
+  const [conversationHistory, setConversationHistory] = useState<
+    { role: 'user' | 'assistant'; content: string }[]
+  >([]);
+
 
   useEffect(() => {
     document.body.style.backgroundImage = `url('https://images.unsplash.com/photo-1505843519540-bca96959386e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')`;
@@ -62,7 +66,7 @@ export default function Home() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({text: inputText}),
+        body: JSON.stringify({ text: inputText, history: conversationHistory }),
       });
 
       if (!response.ok) {
@@ -77,22 +81,20 @@ export default function Home() {
         }
       }
 
-      try {
-        const data = await response.json();
-        setAnalysisResult(data.analysis);
-        setAnalysisVerdict(data.verdict);
-        setAnalysisQuestion(data.clarifyingQuestion);
-      } catch (jsonError) {
-        // Handle JSON parsing errors
-        console.error('JSON parsing error:', jsonError);
-        setAnalysisResult(`Analysis failed: Could not parse JSON response. ${jsonError.message}`);
-        toast({
-          variant: "destructive",
-          title: "Analysis Failed",
-          description: `Could not parse JSON response. ${jsonError.message}`,
-        });
-        return;
-      }
+      const data = await response.json();
+      setAnalysisResult(data.analysis);
+      setAnalysisVerdict(data.verdict);
+      setAnalysisQuestion(data.clarifyingQuestion);
+
+      // Update conversation history
+      setConversationHistory(prevHistory => [
+        ...prevHistory,
+        { role: 'user', content: inputText },
+        {
+          role: 'assistant',
+          content: `Analysis: ${data.analysis}\nVerdict: ${data.verdict}\nClarifying Question: ${data.clarifyingQuestion || ''}`,
+        },
+      ]);
     } catch (error: any) {
       console.error('Analysis failed:', error);
       setAnalysisResult(`Analysis failed: ${error.message}`);
