@@ -5,6 +5,8 @@ import {Textarea} from '@/components/ui/textarea';
 import {Button} from '@/components/ui/button';
 import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
 import {Badge} from '@/components/ui/badge';
+import {useToast} from "@/hooks/use-toast"
+import {useEffect} from 'react';
 
 const API_ENDPOINT = '/api/analyze';
 
@@ -12,10 +14,23 @@ export default function Home() {
   const [inputText, setInputText] = useState('');
   const [analysisResult, setAnalysisResult] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const {toast} = useToast();
+
+  useEffect(() => {
+    document.body.style.backgroundImage = `url('https://picsum.photos/1920/1080')`;
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.backgroundRepeat = 'no-repeat';
+
+    return () => {
+      document.body.style.backgroundImage = '';
+      document.body.style.backgroundSize = '';
+      document.body.style.backgroundRepeat = '';
+    };
+  }, []);
 
   const analyzeText = async () => {
     setLoading(true);
-    setAnalysisResult(null); // Clear previous results
+    setAnalysisResult(null);
     try {
       const response = await fetch(API_ENDPOINT, {
         method: 'POST',
@@ -27,7 +42,8 @@ export default function Home() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(`AI analysis failed: ${errorData.error}`);
+        const errorMessage = errorData.error || `HTTP error! status: ${response.status}`;
+        throw new Error(errorMessage);
       }
 
       const data = await response.json();
@@ -35,6 +51,11 @@ export default function Home() {
     } catch (error: any) {
       console.error('Analysis failed:', error);
       setAnalysisResult(`Analysis failed: ${error.message}`);
+      toast({
+        variant: "destructive",
+        title: "Analysis Failed",
+        description: error.message,
+      });
     } finally {
       setLoading(false);
     }
@@ -54,11 +75,11 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-start min-h-screen py-12 bg-secondary">
+    <div className="flex flex-col items-center justify-start min-h-screen py-12">
       <Card className="w-full max-w-2xl rounded-lg shadow-md bg-card">
         <CardHeader>
           <CardTitle className="text-2xl font-semibold tracking-tight">
-            CapDetective 🔍
+            LieCatcher 🕵️
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -66,7 +87,7 @@ export default function Home() {
             placeholder="Paste the message here..."
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
-            className="bg-background border-input rounded-md focus-visible:ring-ring focus-visible:ring-offset-background"
+            className="bg-secondary border-input rounded-md focus-visible:ring-ring focus-visible:ring-offset-background"
           />
           <Button
             onClick={analyzeText}

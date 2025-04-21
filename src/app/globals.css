@@ -43,11 +43,19 @@ body {
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    --background: 0 0% 100%; /* White */
-    --foreground: 0 0% 0%; /* Black, for better contrast */
-    --secondary: 0 0% 96.1%; /* Light Gray */
-    --destructive: 0 100% 50%; /* Red */
-    --destructive-foreground: 0 0% 100%; /*White*/
+    --background: 220 3% 15%; /* Dark background */
+    --foreground: 0 0% 95%; /* Light text for contrast */
+    --secondary: 220 4% 25%; /* Slightly lighter than background */
+    --destructive: 0 70% 50%; /* Red for errors/alerts */
+    --destructive-foreground: 0 0% 100%;
+    --input: 220 5% 35%;
+    --card: 220 3% 15%;
+    --popover: 220 3% 15%;
+    --muted: 220 4% 25%;
+    --border: 220 5% 35%;
+    --accent: 220 6% 45%;
+    --primary: 140 60% 50%; /* Teal-ish */
+    --primary-foreground: 0 0% 100%;
   }
 
   .dark {
