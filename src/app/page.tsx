@@ -62,13 +62,25 @@ export default function Home() {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        const errorMessage = errorData.error || `HTTP error! status: ${response.status}`;
+        const errorData = await response.text(); // Get the error as text
+        const errorMessage = errorData || `HTTP error! status: ${response.status}`;
         throw new Error(errorMessage);
       }
 
-      const data = await response.json();
-      setAnalysisResult(data.analysis);
+      try {
+        const data = await response.json();
+        setAnalysisResult(data.analysis);
+      } catch (jsonError) {
+        // Handle JSON parsing errors
+        console.error('JSON parsing error:', jsonError);
+        setAnalysisResult(`Analysis failed: Could not parse JSON response. ${jsonError.message}`);
+        toast({
+          variant: "destructive",
+          title: "Analysis Failed",
+          description: `Could not parse JSON response. ${jsonError.message}`,
+        });
+        return;
+      }
     } catch (error: any) {
       console.error('Analysis failed:', error);
       setAnalysisResult(`Analysis failed: ${error.message}`);
